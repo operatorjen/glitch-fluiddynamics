@@ -1,19 +1,19 @@
 
-var MOUSE_INFLUENCE = 12,
+var MOUSE_INFLUENCE = 1,
     GRAVITY_X     = 0,
     GRAVITY_Y     = 0,
     MOUSE_REPEL   = false,
-    GROUPS        = [30,10,20],
+    GROUPS        = [50,10,10],
     GROUP_COLOURS = ['rgba(17,140,202'];
 
 var fluid = function () {  
     let ctx, width, height, num_x, num_y, particles, 
         grid, meta_ctx, textures, num_particles
     
-    const threshold = 140
+    const threshold = 120
     const spacing = 115
-    const radius = 100 
-    const limit = radius * 0.16 
+    const radius = 130 
+    const limit = radius * 0.56 
     
     const process = function () {
         const imageData = meta_ctx.getImageData(0, 0, width, height)
@@ -41,8 +41,8 @@ var fluid = function () {
         process()
 
         const fillStyles = ['rgba(217, 160, 232, 0.005)', 
-                            'rgba(27, 160, 232, 0.005)', 
-                            'rgba(17, 160, 232, 0.005)']              
+                            'rgba(227, 50, 232, 0.005)', 
+                            'rgba(117, 160, 232, 0.005)']              
 
         fillStyles.map(f => {
           ctx.fillStyle = f
@@ -103,7 +103,7 @@ var fluid = function () {
             close = [];
 
         for (var x_off = -1; x_off < 2; x_off++) {
-            for (var y_off = -1; y_off < 12; y_off++) {
+            for (var y_off = -1; y_off < 2; y_off++) {
                 var cell = grid[(cell_y + y_off) * num_x + (cell_x + x_off)];
                 if (cell && cell.length) {
                     for (var a = 0, l = cell.length; a < l; a++) {
@@ -114,8 +114,8 @@ var fluid = function () {
                             var distance = Math.sqrt(dfx * dfx + dfy * dfy);
                             if (distance < spacing) {
                                 var m = 1 - (distance / spacing);
-                                force += Math.pow(m, 12);
-                                force_b += Math.pow(m, 13) / 2;
+                                force += Math.pow(m, 2);
+                                force_b += Math.pow(m, 3) / 2;
                                 particle.m = m;
                                 particle.dfx = (dfx / distance) * m;
                                 particle.dfy = (dfy / distance) * m;
@@ -127,7 +127,7 @@ var fluid = function () {
             }
         }
 
-        force = (force - 4) * 0.25;
+        force = (force - 3) * 0.35;
 
         for (var i = 0, l = close.length; i < l; i++) {
 
@@ -136,7 +136,7 @@ var fluid = function () {
             var press = force + force_b * neighbor.m;
             if (this.type != neighbor.type) press *= 0.35;
 
-            var dx = neighbor.dfx * press * 0.25;
+            var dx = neighbor.dfx * press * 0.825;
             var dy = neighbor.dfy * press * 0.25;
 
             neighbor.x += dx;
@@ -194,9 +194,8 @@ var fluid = function () {
                 if(GROUP_COLOURS[i]) {
                     colour = GROUP_COLOURS[i];
                 } else {
-
                     colour =
-                    'hsla(' + Math.round(Math.random() * 360) + ', 80%, 60%';
+                    'hsla(' + Math.round(Math.random() * 155) + ', 50%, 60%';
                 }
 
                 textures[i] = document.createElement("canvas");
@@ -237,8 +236,8 @@ var fluid = function () {
                     particles.push(
                         new Particle(
                             i,
-                            radius + Math.random() * (width - radius * 2),
-                            radius + Math.random() * (height - radius * 2)
+                            radius + Math.random() * (width - radius * 12),
+                            radius + Math.random() * (height - radius * 32)
                             )
                         );
                 }
@@ -246,7 +245,6 @@ var fluid = function () {
 
             num_particles = particles.length
 
-            play = true;
             run();
         }
     };
