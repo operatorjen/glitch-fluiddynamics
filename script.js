@@ -1,72 +1,55 @@
 
-var MOUSE_INFLUENCE = 5,
+var MOUSE_INFLUENCE = 1,
     GRAVITY_X     = 0,
     GRAVITY_Y     = 0,
     MOUSE_REPEL   = false,
-    GROUPS        = [50,50,50],
-    GROUP_COLOURS = ['rgba(97,160,232'];
+    GROUPS        = [10,10,10],
+    GROUP_COLOURS = ['rgba(17,140,202'];
 
 var fluid = function () {  
-    var ctx, width, height, num_x, num_y, particles, grid, meta_ctx, threshold = 220, play = false, spacing = 45, radius = 30, limit = radius * 0.66, textures, num_particles;
+    let ctx, width, height, num_x, num_y, particles, 
+        grid, meta_ctx, textures, num_particles
+    
+    const threshold = 220
+    const spacing = 35
+    const radius = 40 
+    const limit = radius * 0.6 
+    
+    const process = function () {
+        const imageData = meta_ctx.getImageData(0, 0, width, height)
+        const pix = imageData.data
 
-    var mouse = {
-        down: false,
-        x: 0,
-        y: 0
-    };
-
-    var process_image = function() {
-        var imageData = meta_ctx.getImageData(0, 0, width, height),
-            pix = imageData.data;
-
-        for (var i = 0, n = pix.length; i < n; i += 4) {
-            (pix[i + 3] < threshold) && (pix[i + 3] /= 6);
+        for (let i = 0, n = pix.length; i < n; i += 4) {
+          (pix[i + 3] < threshold) && (pix[i + 3] /= 6)
         }
 
-        ctx.putImageData(imageData, 0, 0);
-    };
+        ctx.putImageData(imageData, 0, 0)
+    }
 
     var run = function () {
-
-        //var time = new Date().getTime();
         meta_ctx.clearRect(0, 0, width, height);
 
-        for (var i = 0, l = num_x * num_y; i < l; i++) grid[i].length = 0;
+        for (let i = 0, l = num_x * num_y; i < l; i++) {
+          grid[i].length = 0
+        }
         
-
         var i = num_particles;
-        while(i--) particles[i].first_process();
+        while(i--) particles[i].first_process()
         i = num_particles;
-        while(i--) particles[i].second_process();
+        while(i--) particles[i].second_process()
 
-        process_image();
+        process()
 
-        
-        ctx.canvas.style.cursor = 'none';
+        const fillStyles = ['rgba(117, 160, 232, 0.005)', 'rgba(197, 160, 232, 0.005)', 'rgba(197, 160, 232, 0.005)']              
 
-        ctx.fillStyle = 'rgba(97, 160, 232, 0.05)';
-        ctx.beginPath();
-        ctx.arc(
-            Math.random() * 100,
-            Math.random() * 100,
-            radius * MOUSE_INFLUENCE,
-            0,
-            Math.PI * 2
-            );
-        ctx.closePath();
-        ctx.fill();
-
-        ctx.fillStyle = 'rgba(97, 160, 232, 0.05)';
-        ctx.beginPath();
-        ctx.arc(
-            Math.random() * 100,
-            Math.random() * 100,
-            (radius * MOUSE_INFLUENCE)/3,
-            0,
-            Math.PI * 2
-            );
-        ctx.closePath();
-        ctx.fill();
+        fillStyles.map(f => {
+          ctx.fillStyle = f
+          ctx.beginPath()
+          ctx.arc(Math.random() * window.innerWidth, Math.random() * window.innerHeight,
+                  radius * MOUSE_INFLUENCE, 0, Math.PI * 2)
+          ctx.closePath()
+          ctx.fill()
+        })
 
        requestAnimationFrame(run);
     };
@@ -84,21 +67,21 @@ var fluid = function () {
     Particle.prototype.first_process = function () {
         var g = grid[Math.round(this.y / spacing) * num_x + Math.round(this.x / spacing)];
 
-        if (g) g.close[g.length++] = this;
+        if (g) {
+          g.close[g.length++] = this
+        }
 
-        this.vx = this.x - this.px;
-        this.vy = this.y - this.py;
-
-        if (mouse.down) {
-            var dist_x = this.x - mouse.x;
-            var dist_y = this.y - mouse.y;
-            var dist = Math.sqrt(dist_x * dist_x + dist_y * dist_y);
-            if (dist < radius * MOUSE_INFLUENCE) {
-                var cos = dist_x / dist;
-                var sin = dist_y / dist;
-                this.vx += (MOUSE_REPEL) ? cos : -cos;
-                this.vy += (MOUSE_REPEL) ? sin : -sin;
-            }
+        this.vx = this.x - this.px
+        this.vy = this.y - this.py
+        
+        var dist_x = this.x - Math.random() * window.innerWidth
+        var dist_y = this.y - Math.random() * window.innerHeight
+        var dist = Math.sqrt(dist_x * dist_x + dist_y * dist_y)
+        if (dist < radius * MOUSE_INFLUENCE) {
+            var cos = dist_x / dist;
+            var sin = dist_y / dist;
+            this.vx += (MOUSE_REPEL) ? cos : -cos;
+            this.vy += (MOUSE_REPEL) ? sin : -sin;
         }
 
         this.vx += GRAVITY_X;
@@ -268,4 +251,4 @@ var fluid = function () {
     
 }();
 
-fluid.init('c', 800, 376);
+fluid.init('c', window.innerWidth, window.innerHeight);
