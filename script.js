@@ -3,7 +3,7 @@ var MOUSE_INFLUENCE = 1,
     GRAVITY_X     = 0,
     GRAVITY_Y     = 0,
     MOUSE_REPEL   = false,
-    GROUPS        = [50,10,10],
+    GROUPS        = [2,10,10],
     GROUP_COLOURS = ['rgba(17,140,202'];
 
 var fluid = function () {  
