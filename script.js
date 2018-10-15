@@ -1,19 +1,19 @@
 
-var MOUSE_INFLUENCE = 1,
+var MOUSE_INFLUENCE = 2,
     GRAVITY_X     = 0,
     GRAVITY_Y     = 0,
     MOUSE_REPEL   = false,
-    GROUPS        = [10,10,10],
+    GROUPS        = [30,10,20],
     GROUP_COLOURS = ['rgba(17,140,202'];
 
 var fluid = function () {  
     let ctx, width, height, num_x, num_y, particles, 
         grid, meta_ctx, textures, num_particles
     
-    const threshold = 220
-    const spacing = 35
-    const radius = 40 
-    const limit = radius * 0.6 
+    const threshold = 200
+    const spacing = 115
+    const radius = 250 
+    const limit = radius * 0.36 
     
     const process = function () {
         const imageData = meta_ctx.getImageData(0, 0, width, height)
@@ -40,7 +40,9 @@ var fluid = function () {
 
         process()
 
-        const fillStyles = ['rgba(117, 160, 232, 0.005)', 'rgba(197, 160, 232, 0.005)', 'rgba(197, 160, 232, 0.005)']              
+        const fillStyles = ['rgba(217, 160, 232, 0.005)', 
+                            'rgba(27, 160, 232, 0.005)', 
+                            'rgba(17, 160, 232, 0.005)']              
 
         fillStyles.map(f => {
           ctx.fillStyle = f
@@ -125,7 +127,7 @@ var fluid = function () {
             }
         }
 
-        force = (force - 3) * 0.5;
+        force = (force - 4) * 0.25;
 
         for (var i = 0, l = close.length; i < l; i++) {
 
@@ -134,8 +136,8 @@ var fluid = function () {
             var press = force + force_b * neighbor.m;
             if (this.type != neighbor.type) press *= 0.35;
 
-            var dx = neighbor.dfx * press * 0.5;
-            var dy = neighbor.dfy * press * 0.5;
+            var dx = neighbor.dfx * press * 0.25;
+            var dy = neighbor.dfy * press * 0.25;
 
             neighbor.x += dx;
             neighbor.y += dy;
