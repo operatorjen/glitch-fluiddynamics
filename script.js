@@ -1,5 +1,5 @@
 
-var MOUSE_INFLUENCE = 2,
+var MOUSE_INFLUENCE = 12,
     GRAVITY_X     = 0,
     GRAVITY_Y     = 0,
     MOUSE_REPEL   = false,
@@ -10,10 +10,10 @@ var fluid = function () {
     let ctx, width, height, num_x, num_y, particles, 
         grid, meta_ctx, textures, num_particles
     
-    const threshold = 200
+    const threshold = 140
     const spacing = 115
-    const radius = 250 
-    const limit = radius * 0.36 
+    const radius = 100 
+    const limit = radius * 0.16 
     
     const process = function () {
         const imageData = meta_ctx.getImageData(0, 0, width, height)
@@ -103,7 +103,7 @@ var fluid = function () {
             close = [];
 
         for (var x_off = -1; x_off < 2; x_off++) {
-            for (var y_off = -1; y_off < 2; y_off++) {
+            for (var y_off = -1; y_off < 12; y_off++) {
                 var cell = grid[(cell_y + y_off) * num_x + (cell_x + x_off)];
                 if (cell && cell.length) {
                     for (var a = 0, l = cell.length; a < l; a++) {
@@ -114,8 +114,8 @@ var fluid = function () {
                             var distance = Math.sqrt(dfx * dfx + dfy * dfy);
                             if (distance < spacing) {
                                 var m = 1 - (distance / spacing);
-                                force += Math.pow(m, 2);
-                                force_b += Math.pow(m, 3) / 2;
+                                force += Math.pow(m, 12);
+                                force_b += Math.pow(m, 13) / 2;
                                 particle.m = m;
                                 particle.dfx = (dfx / distance) * m;
                                 particle.dfy = (dfy / distance) * m;
