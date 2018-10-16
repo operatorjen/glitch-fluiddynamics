@@ -11,8 +11,8 @@ var fluid = function () {
         grid, meta_ctx, textures, num_particles
     
     const threshold = 120
-    const spacing = 115
-    const radius = 130 
+    const spacing = 315
+    const radius = 100 
     const limit = radius * 0.56 
     
     const process = function () {
