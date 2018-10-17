@@ -3,7 +3,7 @@ const MOUSE_INFLUENCE = 1
 const GRAVITY_X = 0
 const GRAVITY_Y = 0
 const MOUSE_REPEL = false
-const GROUPS = [2,10,10]
+const GROUPS = [5,30,5]
 const GROUP_COLOURS = ['rgba(17,140,202']
 const canvas = document.querySelector('#primary')
 const ctx = canvas.getContext('2d')
@@ -13,10 +13,10 @@ const fluid = function () {
     let width, height, numX, numY, particles, 
         grid, textures, numParticles
     
-    const threshold = 120
-    const spacing = 315
-    const radius = 100 
-    const limit = radius * 0.56 
+    const threshold = 120 * Math.sin(120)
+    const spacing = 215 * Math.sin(215) + 10
+    const radius = 100 * Math.sin(120) + 10
+    const limit = radius * 0.001 
     
     const process = function () {
         const imageData = metaCtx.getImageData(0, 0, width, height)
@@ -207,7 +207,7 @@ const fluid = function () {
           if (GROUP_COLOURS[i]) {
             color = GROUP_COLOURS[i]
           } else {
-            color = 'hsla(' + Math.round(Math.random() * 205) + ', 30%, 60%';
+            color = 'hsla(' + Math.round(Math.random() * 10) + ', 60%, 60%';
           }
 
           textures[i] = document.createElement('canvas')
