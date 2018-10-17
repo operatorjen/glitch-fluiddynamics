@@ -193,7 +193,6 @@ const fluid = function () {
         close = []
         textures = []
         
-        const canvas = document.querySelector('#primary')
         canvas.height = height = window.innerHeight
         canvas.width = width = window.innerWidth
       
@@ -208,7 +207,7 @@ const fluid = function () {
           if (GROUP_COLOURS[i]) {
             color = GROUP_COLOURS[i]
           } else {
-            color = 'hsla(' + Math.round(Math.random() * 155) + ', 30%, 60%';
+            color = 'hsla(' + Math.round(Math.random() * 205) + ', 30%, 60%';
           }
 
           textures[i] = document.createElement('canvas')
@@ -217,8 +216,8 @@ const fluid = function () {
           const nctx = textures[i].getContext('2d')
 
           const grad = nctx.createRadialGradient(
-            radius * 2, radius * 2, 1,
-            radius * 2, radius *, radius)
+            radius, radius, 1,
+            radius, radius, radius)
 
           grad.addColorStop(0, color + ', 1)')
           grad.addColorStop(1, color + ', 0)')
@@ -256,3 +255,7 @@ const fluid = function () {
 }()
 
 fluid.init()
+
+window.onresize = function () {
+  fluid.init()
+}
