@@ -5,10 +5,13 @@ const GRAVITY_Y = 0
 const MOUSE_REPEL = false
 const GROUPS = [2,10,10]
 const GROUP_COLOURS = ['rgba(17,140,202']
+const canvas = document.querySelector('#primary')
+const ctx = canvas.getContext('2d')
+let metaCtx
 
 const fluid = function () {  
-    let ctx, width, height, numX, numY, particles, 
-        grid, metaCtx, textures, numParticles
+    let width, height, numX, numY, particles, 
+        grid, textures, numParticles
     
     const threshold = 120
     const spacing = 315
@@ -143,7 +146,7 @@ const fluid = function () {
 
       for (let i = 0; i < close.length; i++) {
         const neighbor = close[i]
-        const press = forceA + forceB * neighbor.m
+        let press = forceA + forceB * neighbor.m
 
         if (this.type !== neighbor.type) {
           press *= 0.35
@@ -184,86 +187,72 @@ const fluid = function () {
     }
         
     return {
-      init: function(canvas, w, h) {
+      init: function () {
         particles = []
         grid = []
         close = []
         textures = []
+        
+        const canvas = document.querySelector('#primary')
+        canvas.height = height = window.innerHeight
+        canvas.width = width = window.innerWidth
+      
+        const metaCanvas = document.createElement('canvas')
+        metaCanvas.width = width
+        metaCanvas.height = height
+        metaCtx = metaCanvas.getContext('2d')
 
-          var canvas 	  = document.getElementById(canvas);
-              ctx   	      = canvas.getContext('2d');
-              canvas.height = h || window.innerHeight;
-              canvas.width  = w || window.innerWidth;
-              width         = canvas.width;
-              height        = canvas.height;
+        for (let i = 0; i < GROUPS.length; i++) {
+          let color
 
-          var meta_canvas    = document.createElement("canvas");
-              meta_canvas.width  = width;
-              meta_canvas.height = height;
-              meta_ctx           = meta_canvas.getContext("2d");
-
-          for(var i = 0; i < GROUPS.length; i++) {
-
-              var colour;
-
-              if(GROUP_COLOURS[i]) {
-                  colour = GROUP_COLOURS[i];
-              } else {
-                  colour =
-                  'hsla(' + Math.round(Math.random() * 155) + ', 50%, 60%';
-              }
-
-              textures[i] = document.createElement("canvas");
-              textures[i].width  = radius * 2;
-              textures[i].height = radius * 2;
-              var nctx = textures[i].getContext("2d");
-
-              var grad = nctx.createRadialGradient(
-                  radius,
-                  radius,
-                  1,
-                  radius,
-                  radius,
-                  radius
-                  );
-
-              grad.addColorStop(0, colour + ',1)');
-              grad.addColorStop(1, colour + ',0)');
-              nctx.fillStyle = grad;
-              nctx.beginPath();
-              nctx.arc(radius, radius, radius, 0, Math.PI * 2, true);
-              nctx.closePath();
-              nctx.fill();
+          if (GROUP_COLOURS[i]) {
+            color = GROUP_COLOURS[i]
+          } else {
+            color = 'hsla(' + Math.round(Math.random() * 155) + ', 30%, 60%';
           }
 
-          num_x = Math.round(width / spacing) + 1;
-          num_y = Math.round(height / spacing) + 1;
+          textures[i] = document.createElement('canvas')
+          textures[i].width = textures[i].height = radius * 2
+        
+          const nctx = textures[i].getContext('2d')
 
-          for (var i = 0; i < num_x * num_y; i++) {
-              grid[i] = {
-                  length: 0,
-                  close: []
-              }
+          const grad = nctx.createRadialGradient(
+            radius * 2, radius * 2, 1,
+            radius * 2, radius *, radius)
+
+          grad.addColorStop(0, color + ', 1)')
+          grad.addColorStop(1, color + ', 0)')
+          nctx.fillStyle = grad
+          nctx.beginPath()
+          nctx.arc(radius, radius, radius, 0, Math.PI * 2, true)
+          nctx.closePath()
+          nctx.fill()
+        }
+
+        numX = Math.round(width / spacing) + 1
+        numY = Math.round(height / spacing) + 1
+
+        for (let i = 0; i < numX * numY; i++) {
+          grid[i] = {
+            length: 0,
+            close: []
           }
+        }
 
-          for (var i = 0; i < GROUPS.length; i++ ) {
-              for (var k = 0; k < GROUPS[i]; k++ ) {
-                  particles.push(
-                      new Particle(
-                          i,
-                          radius + Math.random() * (width - radius * 12),
-                          radius + Math.random() * (height - radius * 32)
-                          )
-                      );
-              }
+        for (let i = 0; i < GROUPS.length; i++) {
+          for (let k = 0; k < GROUPS[i]; k++) {
+            particles.push(
+              new Particle(
+                i,
+                radius + Math.random() * (width - radius * 12),
+                radius + Math.random() * (height - radius * 32)))
           }
+        }
 
-          num_particles = particles.length
-
-          run();
+        numParticles = particles.length
+        run()
       }
-    };
-    
-}();
+    } 
+}()
 
-fluid.init('c', window.innerWidth, window.innerHeight);
+fluid.init()
