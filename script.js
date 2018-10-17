@@ -257,5 +257,6 @@ const fluid = function () {
 fluid.init()
 
 window.onresize = function () {
-  fluid.init()
+  metaCtx.clearRect(0, 0, window.innerWidth, window.innerHeight)
+  ctx = canvas.getContext('2d')
 }
