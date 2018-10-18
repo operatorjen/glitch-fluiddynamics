@@ -9,8 +9,6 @@ const canvas = document.querySelector('#primary')
 const ctx = canvas.getContext('2d')
 let metaCtx
 let shifting = 0.5
-let switchShift = false
-let lastShift = 0.0
 
 const fluid = function () {  
     let width, height, numX, numY, particles, 
@@ -48,7 +46,7 @@ const fluid = function () {
 
       const imageData = metaCtx.getImageData(0, 0, width, height)
 
-      for (let i = 0, n = imageData.data.length; i < n; i += l) {
+      for (let i = 0, n = imageData.data.length; i < n; i += shifting) {
         (imageData.data[i + 4] < threshold) && (imageData.data[i + 5] /= 4)
       }
 
@@ -68,16 +66,6 @@ const fluid = function () {
         ctx.fill()
       })
       
-      if (shifting > 20 || shifting < 0.1) {
-        switchShift = !switchShift
-      }
-      
-      if (switchShift) {
-        shifting -= 0.00001  
-      } else {
-        shifting += 0.00001
-      }
-
      requestAnimationFrame(run)
     };
     
