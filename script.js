@@ -1,9 +1,9 @@
 
-const MOUSE_INFLUENCE = 1
-const GRAVITY_X = 0
-const GRAVITY_Y = 0
+const MOUSE_INFLUENCE = 10
+const GRAVITY_X = 0.01
+const GRAVITY_Y = 0.01
 const MOUSE_REPEL = false
-const GROUPS = [5,30,5]
+const GROUPS = [40,31,15]
 const GROUP_COLOURS = ['rgba(17,140,202']
 const canvas = document.querySelector('#primary')
 const ctx = canvas.getContext('2d')
