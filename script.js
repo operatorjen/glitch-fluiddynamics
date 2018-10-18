@@ -3,19 +3,22 @@ const MOUSE_INFLUENCE = 1
 const GRAVITY_X = 0
 const GRAVITY_Y = 0
 const MOUSE_REPEL = false
-const GROUPS = [90,51,10]
-const GROUP_COLOURS = ['rgba(217,210,102']
+const GROUPS = [180,51,10]
+const GROUP_COLOURS = ['rgba(247,185,182']
 const canvas = document.querySelector('#primary')
 const ctx = canvas.getContext('2d')
 let metaCtx
+let shifting = 0.5
+let switchShift = false
+let lastShift = 0.0
 
 const fluid = function () {  
     let width, height, numX, numY, particles, 
         grid, textures, numParticles
     
     const threshold = 200 * Math.sin(20)
-    const spacing = 15 * Math.sin(15) + 110
-    const radius = 90 * Math.sin(120) + 10
+    const spacing = 10 * Math.sin(15) + 11
+    const radius = 190 * Math.sin(110) + 101
     const limit = radius * 0.001 
 
     const run = function () {
@@ -36,10 +39,16 @@ const fluid = function () {
       while (i--) {
         particles[i].second_process()
       }
+      
+      i = numParticles
+      
+      while (i--) {
+        particles[i].first_process()
+      }
 
       const imageData = metaCtx.getImageData(0, 0, width, height)
 
-      for (let i = 0, n = imageData.data.length; i < n; i += 2) {
+      for (let i = 0, n = imageData.data.length; i < n; i += l) {
         (imageData.data[i + 4] < threshold) && (imageData.data[i + 5] /= 4)
       }
 
@@ -58,6 +67,16 @@ const fluid = function () {
         ctx.closePath()
         ctx.fill()
       })
+      
+      if (shifting > 20 || shifting < 0.1) {
+        switchShift = !switchShift
+      }
+      
+      if (switchShift) {
+        shifting -= 0.00001  
+      } else {
+        shifting += 0.00001
+      }
 
      requestAnimationFrame(run)
     };
