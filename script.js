@@ -1,10 +1,10 @@
 
-const MOUSE_INFLUENCE = 10
-const GRAVITY_X = 0.01
-const GRAVITY_Y = 0.01
+const MOUSE_INFLUENCE = 1
+const GRAVITY_X = 0
+const GRAVITY_Y = 0
 const MOUSE_REPEL = false
-const GROUPS = [40,31,15]
-const GROUP_COLOURS = ['rgba(17,140,202']
+const GROUPS = [90,51,10]
+const GROUP_COLOURS = ['rgba(217,210,102']
 const canvas = document.querySelector('#primary')
 const ctx = canvas.getContext('2d')
 let metaCtx
@@ -13,21 +13,10 @@ const fluid = function () {
     let width, height, numX, numY, particles, 
         grid, textures, numParticles
     
-    const threshold = 120 * Math.sin(120)
-    const spacing = 215 * Math.sin(215) + 10
-    const radius = 100 * Math.sin(120) + 10
+    const threshold = 200 * Math.sin(20)
+    const spacing = 15 * Math.sin(15) + 110
+    const radius = 90 * Math.sin(120) + 10
     const limit = radius * 0.001 
-    
-    const process = function () {
-        const imageData = metaCtx.getImageData(0, 0, width, height)
-        const pix = imageData.data
-
-        for (let i = 0, n = pix.length; i < n; i += 4) {
-          (pix[i + 3] < threshold) && (pix[i + 3] /= 6)
-        }
-
-        ctx.putImageData(imageData, 0, 0)
-    }
 
     const run = function () {
       metaCtx.clearRect(0, 0, width, height)
@@ -48,11 +37,17 @@ const fluid = function () {
         particles[i].second_process()
       }
 
-      process()
+      const imageData = metaCtx.getImageData(0, 0, width, height)
 
-      const fillStyles = ['rgba(217, 160, 232, 0.005)', 
-                          'rgba(227, 50, 232, 0.005)', 
-                          'rgba(117, 160, 232, 0.005)']              
+      for (let i = 0, n = imageData.data.length; i < n; i += 2) {
+        (imageData.data[i + 4] < threshold) && (imageData.data[i + 5] /= 4)
+      }
+
+      ctx.putImageData(imageData, 0, 0)
+
+      const fillStyles = ['rgba(217, 160, 232, 0.002)', 
+                          'rgba(227, 50, 232, 0.002)', 
+                          'rgba(117, 160, 232, 0.002)']              
 
       fillStyles.map(f => {
         ctx.fillStyle = f
