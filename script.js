@@ -46,7 +46,7 @@ const fluid = function () {
 
       const imageData = metaCtx.getImageData(0, 0, width, height)
 
-      for (let i = 0, n = imageData.data.length; i < n; i += shifting) {
+      for (let i = 0, n = imageData.data.length; i < n; i += 4) {
         (imageData.data[i + 4] < threshold) && (imageData.data[i + 5] /= 4)
       }
 
