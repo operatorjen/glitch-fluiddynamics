@@ -1,23 +1,23 @@
 
-const MOUSE_INFLUENCE = 1
-const GRAVITY_X = 0
-const GRAVITY_Y = 0
+const MOUSE_INFLUENCE = 0.1
+const GRAVITY_X = 0.001
+const GRAVITY_Y = 0.001
 const MOUSE_REPEL = false
-const GROUPS = [180,51,10]
-const GROUP_COLOURS = ['rgba(247,185,182']
+const GROUPS = [110,111,110]
+const GROUP_COLOURS = ['rgba(47,185,182']
 const canvas = document.querySelector('#primary')
 const ctx = canvas.getContext('2d')
 let metaCtx
-let shifting = 0.5
+let shifting = 0.1
 
 const fluid = function () {  
     let width, height, numX, numY, particles, 
         grid, textures, numParticles
     
-    const threshold = 200 * Math.sin(20)
-    const spacing = 10 * Math.sin(15) + 11
-    const radius = 190 * Math.sin(110) + 101
-    const limit = radius * 0.001 
+    const threshold = 10 * Math.sin(20)
+    const spacing = 80 * Math.sin(115) + 111
+    const radius = 100 * Math.sin(110) + 11
+    const limit = radius 
 
     const run = function () {
       metaCtx.clearRect(0, 0, width, height)
@@ -46,13 +46,13 @@ const fluid = function () {
 
       const imageData = metaCtx.getImageData(0, 0, width, height)
 
-      for (let i = 0, n = imageData.data.length; i < n; i += 4) {
-        (imageData.data[i + 4] < threshold) && (imageData.data[i + 5] /= 4)
+      for (let i = 0, n = imageData.data.length; i < n; i += 3) {
+        (imageData.data[i + 3] < threshold) && (imageData.data[i + 3] /= 2)
       }
 
       ctx.putImageData(imageData, 0, 0)
 
-      const fillStyles = ['rgba(217, 160, 232, 0.002)', 
+      const fillStyles = ['rgba(217, 160, 232, 0.02)', 
                           'rgba(227, 50, 232, 0.002)', 
                           'rgba(117, 160, 232, 0.002)']              
 
@@ -144,17 +144,17 @@ const fluid = function () {
         }
       }
 
-      forceA = (forceA - 3) * 0.35
+      forceA = (forceA - 2) * 0.85
 
       for (let i = 0; i < close.length; i++) {
         const neighbor = close[i]
         let press = forceA + forceB * neighbor.m
 
         if (this.type !== neighbor.type) {
-          press *= 0.35
+          press *= 0.85
         }
 
-        const dx = neighbor.dfx * press * 0.825
+        const dx = neighbor.dfx * press * 0.25
         const dy = neighbor.dfy * press * 0.25
 
         neighbor.x += dx
