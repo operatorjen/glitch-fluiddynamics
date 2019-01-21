@@ -1,22 +1,22 @@
 
-const MOUSE_INFLUENCE = 0.1
-const GRAVITY_X = 0.001
-const GRAVITY_Y = 0.001
+const MOUSE_INFLUENCE = 0.5
+const GRAVITY_X = 0
+const GRAVITY_Y = 0
 const MOUSE_REPEL = false
-const GROUPS = [110,111,110]
+const GROUPS = [150,150,110]
 const GROUP_COLOURS = ['rgba(47,185,182']
 const canvas = document.querySelector('#primary')
 const ctx = canvas.getContext('2d')
 let metaCtx
-let shifting = 0.1
+let shifting = 10
 
 const fluid = function () {  
     let width, height, numX, numY, particles, 
         grid, textures, numParticles
     
-    const threshold = 10 * Math.sin(20)
-    const spacing = 80 * Math.sin(115) + 111
-    const radius = 100 * Math.sin(110) + 11
+    const threshold = 110 * Math.sin(100)
+    const spacing = 10 * Math.sin(109) + 11
+    const radius = 101 * Math.sin(110) + 11
     const limit = radius 
 
     const run = function () {
@@ -47,14 +47,14 @@ const fluid = function () {
       const imageData = metaCtx.getImageData(0, 0, width, height)
 
       for (let i = 0, n = imageData.data.length; i < n; i += 3) {
-        (imageData.data[i + 3] < threshold) && (imageData.data[i + 3] /= 2)
+        (imageData.data[i + 2] < threshold) && (imageData.data[i + 3] /= 2)
       }
 
       ctx.putImageData(imageData, 0, 0)
 
-      const fillStyles = ['rgba(217, 160, 232, 0.02)', 
-                          'rgba(227, 50, 232, 0.002)', 
-                          'rgba(117, 160, 232, 0.002)']              
+      const fillStyles = ['rgba(217, 160, 32, 0.2)', 
+                          'rgba(237, 50, 132, 0.2)', 
+                          'rgba(117, 160, 232, 0.2)']              
 
       fillStyles.map(f => {
         ctx.fillStyle = f
@@ -151,10 +151,10 @@ const fluid = function () {
         let press = forceA + forceB * neighbor.m
 
         if (this.type !== neighbor.type) {
-          press *= 0.85
+          press *= 0.15
         }
 
-        const dx = neighbor.dfx * press * 0.25
+        const dx = neighbor.dfx * press * 0.15
         const dy = neighbor.dfy * press * 0.25
 
         neighbor.x += dx
