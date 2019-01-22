@@ -3,7 +3,7 @@ const MOUSE_INFLUENCE = 0.5
 const GRAVITY_X = 0
 const GRAVITY_Y = 0
 const MOUSE_REPEL = false
-const GROUPS = [150,150,110]
+const GROUPS = [150,110,11]
 const GROUP_COLOURS = ['rgba(47,185,182']
 const canvas = document.querySelector('#primary')
 const ctx = canvas.getContext('2d')
@@ -15,8 +15,8 @@ const fluid = function () {
         grid, textures, numParticles
     
     const threshold = 110 * Math.sin(100)
-    const spacing = 1 * Math.sin(19) + 11
-    const radius =  1 * Math.sin(110) + 20
+    const spacing = 1 * Math.sin(19) + 100
+    const radius =  10 * Math.sin(100) + 30
     const limit = radius 
 
     const run = function () {
@@ -46,15 +46,15 @@ const fluid = function () {
 
       const imageData = metaCtx.getImageData(0, 0, width, height)
 
-      for (let i = 0, n = imageData.data.length; i < n; i += 3) {
-        (imageData.data[i + 2] < threshold) && (imageData.data[i + 3] /= 2)
+      for (let i = 0, n = imageData.data.length; i < n; i += 4) {
+        (imageData.data[i + 1] < threshold) && (imageData.data[i + 2] /= 2)
       }
 
       ctx.putImageData(imageData, 0, 0)
 
-      const fillStyles = ['rgba(217, 160, 32, 0.2)', 
-                          'rgba(237, 50, 132, 0.2)', 
-                          'rgba(117, 160, 232, 0.2)']              
+      const fillStyles = [`rgba(${Math.random() * 210 - 70}, ${Math.random() * 130 - 50}, 32, 0.9)`, 
+                          `rgba(${Math.random() * 230 - 100}, 50, ${Math.random() * 230 - 100}, 0.6)`, 
+                          `rgba(${Math.random() * 100 - 10}, 160, 232, 0.2)`]              
 
       fillStyles.map(f => {
         ctx.fillStyle = f
@@ -179,7 +179,7 @@ const fluid = function () {
     };
             
     Particle.prototype.draw = function () {
-      const size = radius * 2
+      const size = radius * 10
 
       metaCtx.drawImage(
         textures[this.type],
@@ -209,7 +209,7 @@ const fluid = function () {
           if (GROUP_COLOURS[i]) {
             color = GROUP_COLOURS[i]
           } else {
-            color = 'hsla(' + Math.round(Math.random() * 10) + ', 60%, 60%';
+            color = 'hsla(' + Math.round(Math.random() * 30) + ', 60%, 60%';
           }
 
           textures[i] = document.createElement('canvas')
