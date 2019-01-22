@@ -15,8 +15,8 @@ const fluid = function () {
         grid, textures, numParticles
     
     const threshold = 110 * Math.sin(100)
-    const spacing = 10 * Math.sin(109) + 11
-    const radius = 101 * Math.sin(110) + 11
+    const spacing = 1 * Math.sin(19) + 11
+    const radius =  1 * Math.sin(110) + 20
     const limit = radius 
 
     const run = function () {
@@ -116,8 +116,8 @@ const fluid = function () {
       let cellY = Math.round(this.y / spacing)
       let close = []
 
-      for (let xOff = -1; xOff < 2; xOff++) {
-        for (let yOff = -1; yOff < 2; yOff++) {
+      for (let xOff = -1; xOff < 3; xOff++) {
+        for (let yOff = -1; yOff < 3; yOff++) {
           const cell = grid[(cellY + yOff) * numX + (cellX + xOff)]
           
           if (cell && cell.length) {
@@ -144,18 +144,18 @@ const fluid = function () {
         }
       }
 
-      forceA = (forceA - 2) * 0.85
+      forceA = (forceA - 2) * 0.15
 
       for (let i = 0; i < close.length; i++) {
         const neighbor = close[i]
         let press = forceA + forceB * neighbor.m
 
         if (this.type !== neighbor.type) {
-          press *= 0.15
+          press *= 0.06
         }
 
-        const dx = neighbor.dfx * press * 0.15
-        const dy = neighbor.dfy * press * 0.25
+        const dx = neighbor.dfx * press // * 10.15
+        const dy = neighbor.dfy * press // * 0.25
 
         neighbor.x += dx
         neighbor.y += dy
@@ -213,7 +213,7 @@ const fluid = function () {
           }
 
           textures[i] = document.createElement('canvas')
-          textures[i].width = textures[i].height = radius * 2
+          textures[i].width = textures[i].height = radius * 5
         
           const nctx = textures[i].getContext('2d')
 
