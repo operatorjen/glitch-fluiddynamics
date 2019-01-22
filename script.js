@@ -1,7 +1,7 @@
 
 const MOUSE_INFLUENCE = 0.5
-const GRAVITY_X = 0.001
-const GRAVITY_Y = 0.001
+const GRAVITY_X = 0
+const GRAVITY_Y = 0
 const MOUSE_REPEL = false
 const GROUPS = [150,110,11]
 const GROUP_COLOURS = ['rgba(47,185,182']
@@ -14,9 +14,9 @@ const fluid = function () {
     let width, height, numX, numY, particles, 
         grid, textures, numParticles
     
-    const threshold = Math.sin(200) * 10
-    const spacing = 5
-    const radius = Math.random() * 50
+    const threshold = Math.sin(90) * 10
+    const spacing = 1
+    const radius = Math.random() * 140
     const limit = radius 
 
     const run = function () {
@@ -140,8 +140,8 @@ const fluid = function () {
           press *= 0.06
         }
 
-        const dx = neighbor.dfx * press  * 10.15
-        const dy = neighbor.dfy * press  * 0.25
+        const dx = neighbor.dfx * press
+        const dy = neighbor.dfy * press
 
         neighbor.x += dx
         neighbor.y += dy
@@ -195,11 +195,11 @@ const fluid = function () {
           if (GROUP_COLOURS[i]) {
             color = GROUP_COLOURS[i]
           } else {
-            color = 'hsla(' + Math.round(Math.random() * 30) + ', 60%, 60%';
+            color = 'hsla(' + Math.round(Math.random() * 40) + ', 60%, 60%';
           }
 
           textures[i] = document.createElement('canvas')
-          textures[i].width = textures[i].height = radius * 5
+          textures[i].width = textures[i].height = radius * 10
         
           const nctx = textures[i].getContext('2d')
 
@@ -231,8 +231,8 @@ const fluid = function () {
             particles.push(
               new Particle(
                 i,
-                radius + Math.random() * (width - radius * 12),
-                radius + Math.random() * (height - radius * 32)))
+                radius + Math.random() * (width - radius * 2),
+                radius + Math.random() * (height - radius * 2)))
           }
         }
 
