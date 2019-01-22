@@ -1,7 +1,7 @@
 
 const MOUSE_INFLUENCE = 0.5
-const GRAVITY_X = 0
-const GRAVITY_Y = 0
+const GRAVITY_X = 0.001
+const GRAVITY_Y = 0.001
 const MOUSE_REPEL = false
 const GROUPS = [150,110,11]
 const GROUP_COLOURS = ['rgba(47,185,182']
@@ -14,9 +14,9 @@ const fluid = function () {
     let width, height, numX, numY, particles, 
         grid, textures, numParticles
     
-    const threshold = 110 * Math.sin(100)
-    const spacing = 1 * Math.sin(19) + 100
-    const radius =  10 * Math.sin(100) + 30
+    const threshold = Math.sin(200) * 10
+    const spacing = 5
+    const radius = Math.random() * 50
     const limit = radius 
 
     const run = function () {
@@ -46,25 +46,11 @@ const fluid = function () {
 
       const imageData = metaCtx.getImageData(0, 0, width, height)
 
-      for (let i = 0, n = imageData.data.length; i < n; i += 4) {
+      for (let i = 0, n = imageData.data.length; i < n; i += 3) {
         (imageData.data[i + 1] < threshold) && (imageData.data[i + 2] /= 2)
       }
 
       ctx.putImageData(imageData, 0, 0)
-
-      const fillStyles = [`rgba(${Math.random() * 210 - 70}, ${Math.random() * 130 - 50}, 32, 0.9)`, 
-                          `rgba(${Math.random() * 230 - 100}, 50, ${Math.random() * 230 - 100}, 0.6)`, 
-                          `rgba(${Math.random() * 100 - 10}, 160, 232, 0.2)`]              
-
-      fillStyles.map(f => {
-        ctx.fillStyle = f
-        ctx.beginPath()
-        ctx.arc(Math.random() * window.innerWidth, 
-                Math.random() * window.innerHeight,
-                radius * MOUSE_INFLUENCE, 0, Math.PI * 2)
-        ctx.closePath()
-        ctx.fill()
-      })
       
      requestAnimationFrame(run)
     };
@@ -116,8 +102,8 @@ const fluid = function () {
       let cellY = Math.round(this.y / spacing)
       let close = []
 
-      for (let xOff = -1; xOff < 3; xOff++) {
-        for (let yOff = -1; yOff < 3; yOff++) {
+      for (let xOff = -1; xOff < 2; xOff++) {
+        for (let yOff = -1; yOff < 2; yOff++) {
           const cell = grid[(cellY + yOff) * numX + (cellX + xOff)]
           
           if (cell && cell.length) {
@@ -154,8 +140,8 @@ const fluid = function () {
           press *= 0.06
         }
 
-        const dx = neighbor.dfx * press // * 10.15
-        const dy = neighbor.dfy * press // * 0.25
+        const dx = neighbor.dfx * press  * 10.15
+        const dy = neighbor.dfy * press  * 0.25
 
         neighbor.x += dx
         neighbor.y += dy
